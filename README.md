@@ -27,3 +27,23 @@ Challenges with ML deployment (Focus Points):
 * Ease of automation
 
 Note: Add a sample workflow for image classification on CIFAR.
+
+## Get Started
+* conda create environment
+`conda create -n 520env python=3.10`
+
+* conda install pytorch
+`conda install pytorch torchvision torchaudio -c pytorch`
+
+* conda install pytorch lightning
+`conda install -c conda-forge pytorch-lightning`
+
+* conda install mlflow
+`conda install -c conda-forge mlflow`
+
+Training using PTL and MLFlow Tracking service:
+
+`python3 mlops/cifar_train_mlflow.py --exp-name cifar_test_mlflow --num-epochs 5`
+
+mlruns directory will be created inside mlops directory with runs and their metadata
+<img width="457" alt="project_structure" src="https://user-images.githubusercontent.com/25073753/205217647-964078d1-2214-49ad-877d-c108b516ad03.png">
