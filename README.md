@@ -30,7 +30,7 @@ Note: Add a sample workflow for image classification on CIFAR.
 
 ## Get Started
 * conda create environment
-`conda create -n 520env python=3.10`
+`conda create -n 520env python=3.7`
 
 * conda install pytorch
 `conda install pytorch torchvision torchaudio -c pytorch`
@@ -40,6 +40,9 @@ Note: Add a sample workflow for image classification on CIFAR.
 
 * conda install mlflow
 `conda install -c conda-forge mlflow`
+
+* conda export environment for reproducility
+conda env export --name mlflow_demos > conda.yaml
 
 ## Training using PTL and MLFlow Tracking service:
 
