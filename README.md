@@ -42,7 +42,7 @@ Note: Add a sample workflow for image classification on CIFAR.
 `conda install -c conda-forge mlflow`
 
 * conda export environment for reproducility
-conda env export --name mlflow_demos > conda.yaml
+`conda env export --name mlflow_demos > conda.yaml`
 
 ## Training using PTL and MLFlow Tracking service:
 
