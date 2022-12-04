@@ -1,0 +1,21 @@
+name: CIFAR10 Classification
+
+conda_env: conda.yaml
+
+entry_points:
+  cifar_data_preprocessing:
+    parameters:
+      dataset_path: {type: string, default: "cifar10/dataset"}
+      datamodule_path: {type: string, default: "cifar10/datamodule"}
+      batch_size: {type: int, default: 128}
+    command: "python3.7 cifar_data_preprocessing.py --dataset-path {dataset_path} --datamodule-path {datamodule_path} --batch-size {batch_size}"
+
+  cifar_train_mlflow:
+    parameters:
+      experiment_name: {type: string, default: "cifar10_workflow"}
+      num_epochs: {type: int, default: 1}
+      datamodule_path: {type: string, default: "cifar10/datamodule"}
+    command: "python3.7 cifar_train_mlflow.py --exp-name {experiment_name} --num-epochs {num_epochs} --datamodule-path {datamodule_path}"
+
+  main:
+    command: "python3.7 workflow.py"
