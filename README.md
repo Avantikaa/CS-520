@@ -32,6 +32,9 @@ Note: Add a sample workflow for image classification on CIFAR.
 * conda create environment
 `conda create -n mlflow_demos python=3.7`
 
+* conda activate environment
+`conda activate mlflow_demos`
+
 * conda install pytorch
 `conda install pytorch torchvision torchaudio -c pytorch`
 
@@ -44,9 +47,13 @@ Note: Add a sample workflow for image classification on CIFAR.
 * conda export environment for reproducility
 `conda env export --name mlflow_demos > conda.yaml`
 
-## Training using PTL and MLFlow Tracking service:
+### Data ETL using PTL and MLFlow Tracking service:
 
-`python3 mlops/cifar_train_mlflow.py --exp-name cifar_test_mlflow --num-epochs 5`
+`python3 mlops/cifar_data_preprocessing.py --dataset-path cifar10/dataset --datamodule-path cifar10/datamodule --batch-size 128`
+
+### Training using PTL and MLFlow Tracking service:
+
+`python3 mlops/cifar_train_mlflow.py --exp-name cifar_test_mlflow --num-epochs 5 --datamodule-path cifar10/datamodule`
 
 mlruns directory will be created inside mlops directory with runs and their metadata
 <img width="457" alt="project_structure" src="https://user-images.githubusercontent.com/25073753/205217647-964078d1-2214-49ad-877d-c108b516ad03.png">
