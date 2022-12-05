@@ -40,7 +40,8 @@ def main(hparams):
         )
 
         cifar_module = CIFARLitModule(hparams)
-        cifar_datamodule = torch.load(hparams.datamodule_path)
+        dm_path = os.path.join(hparams.datamodule_path, "cifar10_dm.pkl")
+        cifar_datamodule = torch.load(dm_path)
 
         trainer.fit(cifar_module, cifar_datamodule)
         mlflow.pytorch.log_model(cifar_module, "model", registered_model_name="cifar")
