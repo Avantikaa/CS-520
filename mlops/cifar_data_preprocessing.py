@@ -9,7 +9,6 @@ mlflow.set_tracking_uri("sqlite:///mlruns.db")
 def download_and_transform_data(args):
     with mlflow.start_run() as mlrun:
         cifar10_dm = CIFARDataModule(args)
-        mlflow.log_params(args)
         torch.save(cifar10_dm, "cifar10_dm.pkl")
         mlflow.log_artifact("cifar10_dm.pkl", args.datamodule_path)
         print("Data extracted, transformed and saved at ", args.datamodule_path)
@@ -23,4 +22,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
     print(args)
     download_and_transform_data(args)
-    
