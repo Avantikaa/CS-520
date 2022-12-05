@@ -47,6 +47,8 @@ Note: Add a sample workflow for image classification on CIFAR.
 * conda export environment for reproducility
 `conda env export --name mlflow_demos > conda.yaml`
 
+`cd mlops`
+
 ### Data ETL using PTL and MLFlow Tracking service:
 
 `python3 cifar_data_preprocessing.py --dataset-path cifar10/dataset --datamodule-path cifar10/datamodule --batch-size 128`
