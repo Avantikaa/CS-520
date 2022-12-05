@@ -74,4 +74,11 @@ Training and Validation plots can be found under logged metrics:
 <img width="1375" alt="metrics" src="https://user-images.githubusercontent.com/25073753/205218693-2cd48920-38f3-4dc7-9fe8-2be63889987b.png">
 
 
+### View Registered models, change state of models:
+<img width="1437" alt="registry" src="https://user-images.githubusercontent.com/25073753/205757842-f1d7cbbf-96a7-4b86-9662-03b268b75de1.png">
+
+### Testing the registered model (can test any version, or model in any stage):
+`python3.7 cifar_inference_mlflow.py --model "cifar" --stage="Staging" --test-datasource="cifar10/datamodule"`
+
+
 
