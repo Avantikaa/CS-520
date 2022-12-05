@@ -80,5 +80,7 @@ Training and Validation plots can be found under logged metrics:
 ### Testing the registered model (can test any version, or model in any stage):
 `python3.7 cifar_inference_mlflow.py --model "cifar" --stage="Staging" --test-datasource="cifar10/datamodule"`
 
-
+### Run a multistep workflow with MLFlow:
+Look at the MLProject file for workflow steps and conda.yaml for environment details.
+Execute `mlflow run .` to start a workflow with multiple steps. Data between steps can be shared through artifacts.
 
