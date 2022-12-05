@@ -13,38 +13,44 @@ warnings.filterwarnings("ignore")
 
 utils.set_seed(0)
 
-registry_uri = 'sqlite:///mlflow.db'
-tracking_uri = 'http://127.0.0.1:5000'
-
-mlflow.tracking.set_registry_uri(registry_uri)
-mlflow.tracking.set_tracking_uri(tracking_uri)
+exp_artifacts_dir = './mlruns'
+MLFLOW_TRACKING_URI = "sqlite:///mlruns.db"
 
 def main(hparams):
-    with mlflow.start_run() as mlrun:
-        cifar_module = CIFARLitModule(hparams)
 
-        mlf_logger = MLFlowLogger(experiment_name=hparams.exp_name, tracking_uri=tracking_uri, tags=args.tags)
+    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+    experiment = mlflow.get_experiment_by_name(hparams.exp_name)
+    exp_id = experiment.experiment_id if experiment else mlflow.create_experiment(hparams.exp_name)
 
-        exp = mlf_logger.experiment.get_experiment_by_name(hparams.exp_name)
-        artifacts_dir = os.path.join(exp.artifact_location, mlf_logger.run_id, "artifacts")
+    with mlflow.start_run(experiment_id=exp_id) as run:
+        run_id = run.info.run_id
+        print(f'Run ID: {run_id}')
+
+        mlflow_logger = MLFlowLogger(experiment_name=hparams.exp_name, tracking_uri=MLFLOW_TRACKING_URI, tags=args.tags)
+        mlflow_logger._run_id = run_id
+
+        artifacts_dir = os.path.join(exp_artifacts_dir, run_id, "artifacts")
 
         checkpoint_callback = ModelCheckpoint(
             dirpath=artifacts_dir, save_top_k=-1, verbose=True, monitor="val_loss_avg", mode="min"
         )
 
         trainer = Trainer(
-            logger=mlf_logger, callbacks=[checkpoint_callback], max_epochs=hparams.num_epochs, accelerator="cpu"
+            logger=mlflow_logger, callbacks=[checkpoint_callback], max_epochs=hparams.num_epochs, accelerator="cpu"
         )
-        # Auto log all MLflow entities
-        # mlflow.pytorch.autolog()
-        mlflow.pytorch.log_model(cifar_module, "model", registered_model_name="cifar")
+
+        cifar_module = CIFARLitModule(hparams)
         cifar_datamodule = torch.load(hparams.datamodule_path)
+
         trainer.fit(cifar_module, cifar_datamodule)
+        mlflow.pytorch.log_model(cifar_module, "model", registered_model_name="cifar")
+        
         predictions = trainer.predict(cifar_module, cifar_datamodule.test_dataloader())
         torch.save(predictions, "test_results.pkl")
         torch.save(cifar_datamodule.test_dataloader().dataset, "test_dataset.pkl")
-        mlf_logger.experiment.log_artifact(run_id = mlf_logger.run_id, local_path = "test_dataset.pkl")
-        mlf_logger.experiment.log_artifact(run_id = mlf_logger.run_id, local_path = "test_results.pkl")
+
+        mlflow_logger.experiment.log_artifact(run_id = mlflow_logger.run_id, local_path = "test_dataset.pkl")
+        mlflow_logger.experiment.log_artifact(run_id = mlflow_logger.run_id, local_path = "test_results.pkl")
 
 
 if __name__ == "__main__":
@@ -56,5 +62,4 @@ if __name__ == "__main__":
     parser.add_argument("--datamodule-path", default="cifar10/datamodule")
     parser = CIFARLitModule.add_model_specific_args(parser)
     args = parser.parse_args()
-    print(args)
     main(args)
