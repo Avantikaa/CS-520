@@ -51,7 +51,7 @@ Note: Add a sample workflow for image classification on CIFAR.
 
 ### Data ETL using PTL and MLFlow Tracking service:
 
-`python3 cifar_data_preprocessing.py --dataset-path cifar10/dataset --datamodule-path cifar10/datamodule --batch-size 128`
+`python3 cifar_data_preprocessing.py --exp-name cifar_test_mlflow --dataset-path cifar10/dataset --datamodule-path cifar10/datamodule --batch-size 128`
 
 ### Training using PTL and MLFlow Tracking service:
 
