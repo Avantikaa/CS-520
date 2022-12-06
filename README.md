@@ -61,7 +61,7 @@ mlruns directory will be created inside mlops directory with runs and their meta
 <img width="457" alt="project_structure" src="https://user-images.githubusercontent.com/25073753/205217647-964078d1-2214-49ad-877d-c108b516ad03.png">
 
 ## Tracking experiments with MLFLow:
-`mlflow ui` or `mlflow server --backend-store-uri sqlite:///mydb.sqlite --default-artifact-root ./mlruns`, use the latter to use Model Registry.
+`mlflow ui` or `mlflow server --backend-store-uri sqlite:///mlrun.db --default-artifact-root ./mlruns`, use the latter to use Model Registry.
 
 This command will launch the local tracking server at http://127.0.0.1:5000/
 
