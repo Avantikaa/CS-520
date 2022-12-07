@@ -61,7 +61,7 @@ mlruns directory will be created inside mlops directory with runs and their meta
 <img width="457" alt="project_structure" src="https://user-images.githubusercontent.com/25073753/205217647-964078d1-2214-49ad-877d-c108b516ad03.png">
 
 ## Tracking experiments with MLFLow:
-`mlflow ui`
+`mlflow ui` or `mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns`, use the latter to use Model Registry.
 
 This command will launch the local tracking server at http://127.0.0.1:5000/
 
@@ -74,4 +74,13 @@ Training and Validation plots can be found under logged metrics:
 <img width="1375" alt="metrics" src="https://user-images.githubusercontent.com/25073753/205218693-2cd48920-38f3-4dc7-9fe8-2be63889987b.png">
 
 
+### View Registered models, change state of models:
+<img width="1437" alt="registry" src="https://user-images.githubusercontent.com/25073753/205757842-f1d7cbbf-96a7-4b86-9662-03b268b75de1.png">
+
+### Testing the registered model (can test any version, or model in any stage):
+`python3.7 cifar_inference_mlflow.py --model "cifar" --stage="Staging" --test-datasource="cifar10/datamodule"`
+
+### Run a multistep workflow with MLFlow:
+Look at the MLProject file for workflow steps and conda.yaml for environment details.
+Execute `mlflow run .` to start a workflow with multiple steps. Data between steps can be shared through artifacts.
 

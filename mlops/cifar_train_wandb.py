@@ -116,6 +116,13 @@ def main(hparams):
     trainer = pl.Trainer(
         logger=wandb_logger, callbacks=[early_stop_callback,ImagePredictionLogger(val_samples),checkpoint_callback], max_epochs=hparams.num_epochs, accelerator="cuda"
     )
+
+    torch.save(trainer, "saved_model")
+    model_artifact_name = "model_run"
+    art = wandb.Artifact(model_artifact_name, type="model")
+    art.add_file(local_path="saved_model")
+    wandb.log_artifact(art) 
+        
     trainer.fit(cifar_module)
     predictions = trainer.predict(cifar_module, cifar_module.test_dataloader())
     torch.save(predictions, "wandb_test_results.pkl")
