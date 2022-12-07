@@ -84,3 +84,19 @@ Training and Validation plots can be found under logged metrics:
 Look at the MLProject file for workflow steps and conda.yaml for environment details.
 Execute `mlflow run .` to start a workflow with multiple steps. Data between steps can be shared through artifacts.
 
+### Run a CI/CD job for continually testing and deploying MLFlow models from experiments:
+**Goal:**
+Update the model in a pre-prod environment like Staging with the current model in experiments if it performs better than the last model in Staging. This is the first step toward continual development and deployment with ML workflows
+
+* get the run associated with the model in Staging
+* get the latest model for the same experiment 
+* get the recorded metrics with the best model and latest model. 
+* compare the performance on recorded metrics, if best model is better, exit.
+* If latest model is better, check its performance on a held-out test dataset (doubly check)
+* If it clears mandatory checks to be pushed to Staging evironment, update the model in Staging.
+* This process can be extended to notify developers/teams (out of scope for our work).
+* This model in staging can be served in production with schedulers and regular SE updates / QA Tests / Sign offs.
+
+`python3.7 mlflow_ci_cd.py --model-name "cifar" --stage "Staging" --test-datasource "cifar10/datamodule/cifar10_dm.pkl" --experiment-name "cifar_mlflow_model"`
+
+
