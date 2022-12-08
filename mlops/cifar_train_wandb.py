@@ -51,25 +51,17 @@ class ImagePredictionLogger(pl.callbacks.Callback):
 
 
 def main(hparams):
-    wandb.init()
-    cifar_module = Module(hparams)
-    #--------------Wandb functionality------------------
-    # dm = CIFAR10DataModule(batch_size=32)
-    # # To access the x_dataloader we need to call prepare_data and setup.
-    # dm.prepare_data()
-    # dm.setup()
-    
+    wandb.init() #initialize wandb run
+    cifar_module = Module(hparams)  #get the cifar dataset
+    #--------------Wandb functionality------------------   
     # Samples required by the custom ImagePredictionLogger callback to log image predictions.
     val_samples = next(iter(cifar_module.val_dataloader()))
     val_imgs, val_labels = val_samples[0], val_samples[1]
     #----------------------end--------------------------
+    #W&B provides a lightweight wrapper for logging your ML experiments, used to seamlessly log metrics, model weights, media and more
+    wandb_logger = WandbLogger(project='wandb-lightning', job_type='train') 
     
-    wandb_logger = WandbLogger(project='wandb-lightning', job_type='train')
-    
-
-    #exp = wandb_logger.experiment.get_experiment_by_name(hparams.exp_name)
-    #artifacts_dir = os.path.join(exp.artifact_location, wandb_logger.run_id, "artifacts")
-
+    #implementing model checkpointing and early stopping
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
         dirpath='./wandb_checkpoints/', save_top_k=-1, verbose=True, monitor="val_loss_avg", mode="min"
     )
@@ -79,16 +71,18 @@ def main(hparams):
         logger=wandb_logger, callbacks=[early_stop_callback,ImagePredictionLogger(val_samples),checkpoint_callback], max_epochs=hparams.num_epochs, accelerator="cuda"
     )
 
+
+        
+    trainer.fit(cifar_module)  #fit the model
+    predictions = trainer.predict(cifar_module, cifar_module.test_dataloader())  #predict the class on test set
     torch.save(trainer, "saved_model")
     model_artifact_name = "model_run"
-    art = wandb.Artifact(model_artifact_name, type="model")
+    art = wandb.Artifact(model_artifact_name, type="model") #Wandb building block for dataset and model versioning - Flexible and lightweight
     art.add_file(local_path="saved_model")
     wandb.log_artifact(art) 
-        
-    trainer.fit(cifar_module)
-    predictions = trainer.predict(cifar_module, cifar_module.test_dataloader())
     torch.save(predictions, "wandb_test_results.pkl")
     torch.save(cifar_module.test_dataloader().dataset, "wandb_test_dataset.pkl")
+        
     
     data_artifact = wandb.Artifact('wandb_test_dataset.pkl',type='dataset')
     data_artifact.add_file(local_path='wandb_test_dataset.pkl')
