@@ -47,7 +47,7 @@ def main(hparams):
         )
 
         trainer = Trainer(
-            logger=mlflow_logger, callbacks=[checkpoint_callback], max_epochs=hparams.num_epochs, accelerator="cuda"
+            logger=mlflow_logger, callbacks=[checkpoint_callback], max_epochs=hparams.num_epochs, accelerator="cpu"
         )
 
         cifar_module = CIFARLitModule(hparams)
