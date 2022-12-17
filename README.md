@@ -101,7 +101,7 @@ Update the model in a pre-prod environment like Staging with the current model i
 
 [Link to slides](https://docs.google.com/presentation/d/12i0SK8bW5FZnVAXy3Ti5M1vTU-c3s-vatHmbcLvSYmI/edit?usp=sharing)
 
-###Running Weights and Biases
+### Running Weights and Biases
 
 * Notebook for tracking with Wandb - 520_Project.ipynb (This notebook calls cifar_train_wandb.py)
 * Notebook for sweeps in Wandb - wandb_sweep.ipynb
