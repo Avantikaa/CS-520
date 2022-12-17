@@ -99,4 +99,4 @@ Update the model in a pre-prod environment like Staging with the current model i
 
 `python3.7 mlflow_ci_cd.py --model-name "cifar" --stage "Staging" --test-datasource "cifar10/datamodule/cifar10_dm.pkl" --experiment-name "cifar_mlflow_model"`
 
-
+[Link to slides](https://docs.google.com/presentation/d/12i0SK8bW5FZnVAXy3Ti5M1vTU-c3s-vatHmbcLvSYmI/edit?usp=sharing)
